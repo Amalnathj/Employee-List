@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white">
+
+  
+  <div class="flex justify-between items-center p-4 bg-white shadow">
+  <h2 class="text-red-600 font-semibold text-3xl">
+    Welcome, <span id="userName"></span>
+  </h2>
+  <button onclick="logout()" class="bg-purple-400 text-red-600 px-4 py-2 rounded">
+    Logout
+  </button>
+</div>
+
+
+
+  
+  <div class="flex min-h-screen-1">
+    
+    
+    <div class="hidden md:flex w-1/1 relative">
+    <img src="https://i.pinimg.com/736x/c3/06/2b/c3062be87d875fc0fde742c8143b038e.jpg" alt=""
+      class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-r from-pink-500/70 to-purple-600/70 "></div>
+  </div>
+
+   
+    <div class="flex-1 p-6 overflow-y-auto">
+      <div class="max-w-5xl mx-auto mt-6 grid grid-cols-2 gap-8">
+        
+        
+        <div class="bg-white p-6 rounded-lg shadow h-fit">
+          <h2 class="text-3xl font-semibold text-gray-800 mb-6">Add Employee</h2>
+          <form>
+            <input type="text" id="empId" placeholder="Employee Id" class="w-full mb-3 border p-2 rounded focus:ring-2 focus:ring-blue-400">
+            <input type="text" id="empName" placeholder="Employee Name" class="w-full mb-3 border p-2 rounded focus:ring-2 focus:ring-pink-400">
+            <input type="text" id="empAddress" placeholder="Employee Address" class="w-full mb-3 border p-2 rounded focus:ring-2 focus:ring-yellow-400">
+            <input type="text" id="empDesignation" placeholder="Employee Designation" class="w-full mb-3 border p-2 rounded focus:ring-2 focus:ring-green-400">
+            <input type="text" id="empExperience" placeholder="Employee Experience" class="w-full mb-3 border p-2 rounded focus:ring-2 focus:ring-indigo-400">
+            <input type="text" id="empSalary" placeholder="Employee Salary" class="w-full mb-3 border p-2 rounded focus:ring-2 focus:ring-yellow-400">
+            <button onclick="addEmployee()" type="button"
+          class="w-full py-2 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold hover:opacity-90 transition duration-300">
+          Add Employee
+        </button>
+          </form>
+        </div>
+
+        
+        <div class="bg-white p-6 rounded-lg shadow h-fit">
+          <h2 class="text-3xl font-semibold text-gray-800 mb-6">Search Employee</h2>
+          <input type="text" id="searchId" placeholder="Search Id" class="w-full mb-3 border p-2 rounded">
+            <button onclick="searchEmployee()" type="button"
+          class="w-full py-2 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold hover:opacity-90 transition duration-300">
+          Search
+        </button>
+          <div id="searchResult" class="mt-4 font text-gray-700"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <script>
+    
+    if (!localStorage.getItem("isLoggedIn")) {
+      window.location.href = "login.html";
+    }
+
+    
+    const user = JSON.parse(localStorage.getItem("userData"));
+    if (user) {
+      document.getElementById("userName").textContent = user.firstName || user.email;
+    }
+
+    
+    function addEmployee() {
+      const employee = {
+        id: empId.value.trim(),
+        name: empName.value.trim(),
+        address: empAddress.value.trim(),
+        designation: empDesignation.value.trim(),
+        experience: empExperience.value.trim(),
+        salary: empSalary.value.trim()
+      };
+
+      if (!employee.id || !employee.name) {
+        alert("Please fill at least ID and Name!");
+        return;
+      }
+
+      let employees = JSON.parse(localStorage.getItem("employees")) || [];
+      employees.push(employee);
+      localStorage.setItem("employees", JSON.stringify(employees));
+      alert("Employee Added sucessfully!");
+
+      
+      empId.value = empName.value = empAddress.value = empDesignation.value = empExperience.value = empSalary.value = "";
+    }
+
+    
+    function searchEmployee() {
+      const id = document.getElementById("searchId").value.trim();
+      let employees = JSON.parse(localStorage.getItem("employees")) || [];
+      let emp = employees.find(e => e.id === id);
+
+      if (emp) {
+        document.getElementById("searchResult").innerHTML = `
+          <p><strong>Name:</strong> ${emp.name}</p>
+          <p><strong>Address:</strong> ${emp.address}</p>
+          <p><strong>Designation:</strong> ${emp.designation}</p>
+          <p><strong>Experience:</strong> ${emp.experience}</p>
+          <p><strong>Salary:</strong> ${emp.salary}</p>
+        `;
+      } else {
+        document.getElementById("searchResult").innerHTML = `<p class="text-red-500">Employee not found!</p>`;
+      }
+    }
+
+    
+    function logout() {
+      localStorage.removeItem("isLoggedIn");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

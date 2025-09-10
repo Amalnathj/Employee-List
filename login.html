@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen flex">
+
+  
+  <div class="hidden md:flex w-1/2 relative ">
+    <img src="https://thumbs.dreamstime.com/b/login-icon-button-vector-illustration-isolated-white-background-126999474.jpg" alt=""
+      class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-r from-pink-500/70 to-purple-600/70"></div>
+  </div>
+
+  
+  <div class="flex w-full md:w-1/2 items-center justify-center bg-white">
+    <div class="w-full max-w-md p-8">
+      <h2 class="text-3xl font-bold text-gray-800 mb-6">Login Here...</h2>
+
+      <div class="space-y-4">
+        <input id="email_login" type="email" placeholder="Email"
+          class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-purple-400">
+
+        <input id="password_login" type="password" placeholder="Password"
+          class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-pink-400">
+
+        <button onclick="Login(event)" type="button"
+          class="w-full py-2 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold hover:opacity-90 transition duration-300">
+          Login
+        </button>
+
+        <p class="text-sm text-gray-600 text-center">Don’t have an account?
+          <a href="register.html" class="text-pink-500 hover:underline">Register</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function Login(event){
+      event.preventDefault();
+      const email = document.getElementById("email_login").value;
+      const password = document.getElementById("password_login").value;
+
+      const storedUser = JSON.parse(localStorage.getItem("userData"));
+
+      if (!storedUser) {
+        alert("No registered user found. Please sign up first.");
+        return;
+      }
+
+      if (storedUser.email === email && storedUser.password === password) {
+        alert("Login successful!");
+        localStorage.setItem("isLoggedIn", "true");  
+        window.location.href = "dashboard.html";      
+      } else {
+        alert("Invalid email or password.");
+      }
+    }
+  </script>
+
+</body>
+</html>
+
